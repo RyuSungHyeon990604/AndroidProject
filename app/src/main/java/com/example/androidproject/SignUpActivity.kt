@@ -49,7 +49,7 @@ class SignUpActivity : AppCompatActivity() {
                     println("성공")
                 } else {
                     Toast.makeText(this, "올바른 이메일 형식이 아닙니다.", Toast.LENGTH_SHORT).show()
-                    println("실패")
+                    println("실패!")
                 }
             }
 
