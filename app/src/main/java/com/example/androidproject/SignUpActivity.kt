@@ -16,7 +16,6 @@ class SignUpActivity : AppCompatActivity() {
 
         val signupbtn = binding.signUpButton//findViewById<Button>(R.id.sign_up_button)
         signupbtn.setOnClickListener {
-
             signUp("a@a.com", "123456")
         }
     }
