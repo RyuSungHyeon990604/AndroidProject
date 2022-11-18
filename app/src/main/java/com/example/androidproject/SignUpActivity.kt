@@ -31,7 +31,7 @@ class SignUpActivity : AppCompatActivity() {
                 binding.signUpPassword1.requestFocus();
 
             }else if(!password.equals(password2)){
-                Toast.makeText(this, "비밀번호를 확인해주세요!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "비밀번호를 확인해주세요!", Toast.LENGTH_SHORT).show()
                 binding.signUpPassword2.requestFocus();
             }
             else {
