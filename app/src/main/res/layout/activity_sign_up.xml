@@ -16,7 +16,7 @@
             android:layout_width="277dp"
             android:layout_height="364dp"
             android:layout_marginTop="64dp"
-            app:srcCompat="@drawable/Man" />
+            app:srcCompat="@drawable/man" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:padding="10dp">
 
             <EditText
-                android:id="@+id/editTextTextEmailAddress2"
+                android:id="@+id/sign_up_EmailAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -37,7 +37,7 @@
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <EditText
-                android:id="@+id/editTextTextPassword5"
+                android:id="@+id/sign_up_Password1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -47,7 +47,7 @@
                 tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <EditText
-                android:id="@+id/editTextTextPassword6"
+                android:id="@+id/sign_up_Password2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
