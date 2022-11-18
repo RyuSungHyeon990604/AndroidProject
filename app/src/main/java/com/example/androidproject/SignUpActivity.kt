@@ -25,7 +25,7 @@ class SignUpActivity : AppCompatActivity() {
         Firebase.auth.createUserWithEmailAndPassword(userEmail, password)
             .addOnCompleteListener(this) {
                 if (it.isSuccessful) {
-                    println("성공")
+                    println("성공햇다고~~~~")
                 } else {
                     println("실패")
                 }
