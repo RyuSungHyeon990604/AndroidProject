@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity() {
             loginEmail()
         }
         binding.RegisterButton.setOnClickListener {
-            val nextIntent = Intent(this, SignUpActivity::class.java)
-            startActivity(nextIntent)
+            val intent=Intent(this,SignUpActivity::class.java)
+            startActivity(intent)
         }
     }
     private fun loginEmail(){
