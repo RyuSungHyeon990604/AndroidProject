@@ -29,9 +29,9 @@ class SignUpActivity : AppCompatActivity() {
             else if(password.length<6){
                 Toast.makeText(this, "비밀번호는 6자 이상", Toast.LENGTH_SHORT).show()
                 binding.signUpPassword1.requestFocus();
-            }
-            else if(!password.equals(password2)){
-                Toast.makeText(this, "비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show()
+
+            }else if(!password.equals(password2)){
+                Toast.makeText(this, "비밀번호를 확인해주세요!", Toast.LENGTH_SHORT).show()
                 binding.signUpPassword2.requestFocus();
             }
             else {
@@ -50,7 +50,7 @@ class SignUpActivity : AppCompatActivity() {
                     println("성공")
                 } else {
                     Toast.makeText(this, "올바른 이메일 형식이 아닙니다.", Toast.LENGTH_SHORT).show()
-                    println("실패")
+                    println("실패!")
                 }
             }
 
