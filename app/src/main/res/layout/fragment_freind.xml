@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context=".FreindFragment">
+    tools:context=".FriendFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:text="this is freind" />
 
         <TextView
             android:layout_width="wrap_content"
