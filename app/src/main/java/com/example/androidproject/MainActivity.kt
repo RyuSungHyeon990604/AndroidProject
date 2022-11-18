@@ -1,5 +1,6 @@
 package com.example.androidproject
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -21,7 +22,8 @@ class MainActivity : AppCompatActivity() {
             loginEmail()
         }
         binding.RegisterButton.setOnClickListener {
-
+            val intent=Intent(this,SignUpActivity::class.java)
+            startActivity(intent)
         }
     }
     private fun loginEmail(){
