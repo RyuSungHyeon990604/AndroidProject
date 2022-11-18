@@ -24,7 +24,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.FreindFragment -> {
-                    replaceFragment(FreindFragment())
+                    replaceFragment(FriendFragment())
                     true
                 }
                 R.id.SearchFragment -> {
