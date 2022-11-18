@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/FreindFragment"
+        android:id="@+id/FriendFragment"
         android:title="친구"
         android:icon="@drawable/friend_icon"/>
     <item
-        android:id="@+id/homeFragment"
+        android:id="@+id/HomeFragment"
         android:title="홈"
         android:icon="@drawable/home_icon"/>
 
