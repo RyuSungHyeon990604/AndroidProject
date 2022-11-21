@@ -15,7 +15,6 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var navBar=binding.navigationView as BottomNavigationView
-        supportFragmentManager.beginTransaction().add(R.id.navigationView, HomeFragment()).commit()
 
         navBar.setOnNavigationItemSelectedListener {item ->
             when(item.itemId) {

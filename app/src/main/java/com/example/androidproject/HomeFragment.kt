@@ -1,15 +1,33 @@
 package com.example.androidproject
 
+
+import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.androidproject.databinding.FragmentHomeBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+
 
 /**
  * A simple [Fragment] subclass.
@@ -17,43 +35,81 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    var firestore : FirebaseFirestore ?= null
+    var uid : String? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home, container, false)
+        firestore = FirebaseFirestore.getInstance()
+        uid = FirebaseAuth.getInstance().currentUser?.uid
+        view.findViewById<RecyclerView>(R.id.H_Recycler).adapter = HomeRecyclerViewAdapter()
+        view.findViewById<RecyclerView>(R.id.H_Recycler).layoutManager = LinearLayoutManager(activity)
+        return view
     }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    inner class HomeRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+        var contentDTOs : ArrayList<ContentDTO> = arrayListOf()
+        var UIDlist : ArrayList<String> = arrayListOf()
+        init{
+            firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                contentDTOs.clear()
+                UIDlist.clear()
+                for(snapshot in querySnapshot!!.documents){
+                    var item = snapshot.toObject(ContentDTO::class.java)
+                    contentDTOs.add(item!!)
+                    UIDlist.add(snapshot.id)
                 }
+                notifyDataSetChanged()
             }
+        }
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            var view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail, parent, false)
+            return CustomViewHolder(view)
+        }
+
+        inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            var viewholer = (holder as CustomViewHolder).itemView
+            viewholer.findViewById<TextView>(R.id.profile_textView).text = contentDTOs!![position].userId
+            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholer.findViewById(R.id.image_Content))
+            viewholer.findViewById<TextView>(R.id.content).text = contentDTOs!![position].explain
+            viewholer.findViewById<TextView>(R.id.favoriteCount).text = "Likes " + contentDTOs!![position].favoriteCount
+            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholer.findViewById(R.id.profile_image))
+            viewholer.findViewById<ImageView>(R.id.favoriteImage).setOnClickListener{
+                favoriteEvent(position)
+            }
+            if(contentDTOs!![position].favorites.containsKey(uid)){
+                viewholer.findViewById<ImageView>(R.id.favoriteImage).setImageResource(R.drawable.ic_baseline_favorite_24)
+            }
+            else{
+                viewholer.findViewById<ImageView>(R.id.favoriteImage).setImageResource(R.drawable.ic_baseline_favorite_border_24)
+            }
+        }
+
+        override fun getItemCount(): Int {
+            return contentDTOs.size
+        }
+        fun favoriteEvent(position: Int){
+            var tsDoc = firestore?.collection("images")?.document(UIDlist[position])
+            firestore?.runTransaction { transaction ->
+                var uid = FirebaseAuth.getInstance().currentUser?.uid
+                var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
+                if(contentDTO!!.favorites.containsKey(uid)){ // 좋아요 눌렀을 때
+                    contentDTO?.favoriteCount = contentDTO?.favoriteCount?.minus(1)
+                    if (uid != null) {
+                        contentDTO?.favorites?.remove(uid)
+                    };
+                }
+                else{
+                    contentDTO?.favoriteCount = contentDTO?.favoriteCount?.plus(1)
+                    contentDTO?.favorites?.set(uid!!, true)
+                }
+                transaction.set(tsDoc,contentDTO)
+            }
+        }
     }
 }
