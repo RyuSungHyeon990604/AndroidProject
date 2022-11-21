@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             , binding.UserPasswordText.text.toString()).addOnCompleteListener {
             if(it.isSuccessful){
                 Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this,HomeActivity::class.java)
+                val intent = Intent(this,FriendActivity::class.java)
                 startActivity(intent)
             }
             else{
