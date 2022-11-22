@@ -45,6 +45,9 @@ class HomeActivity : AppCompatActivity() {
                 println("Asdasd")
             }
         }
+        binding.searchHomeFragment.setOnClickListener {
+            startActivity(Intent(this,SearchActivity::class.java))
+        }
 
         ActivityCompat.requestPermissions(this,
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
