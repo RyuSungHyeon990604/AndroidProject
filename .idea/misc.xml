@@ -11,14 +11,20 @@
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/drawable/ic_baseline_create_24.xml" value="0.1015" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.1015" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/drawable/search_icon.xml" value="0.1205" />
+        <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_comment.xml" value="0.215625" />
+        <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_friend.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_home.xml" value="0.264" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_profile.xml" value="0.14583333333333334" />
+        <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_search.xml" value="0.190625" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_sign_up.xml" value="0.2" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/activity_writing.xml" value="0.13125" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/fragment_freind.xml" value="0.1125" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/fragment_friend.xml" value="0.11041666666666666" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/fragment_home.xml" value="0.4" />
+        <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/fragment_mypage.xml" value="0.2" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/fragment_search.xml" value="0.2931323283082077" />
+        <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/item_comment.xml" value="0.215625" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/item_detail.xml" value="0.21105072463768115" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/list_item.xml" value="0.11197916666666667" />
         <entry key="..\:/Users/jyu94/AndroidStudioProjects/AndroidProject/app/src/main/res/layout/search_item_list.xml" value="0.4" />
