@@ -4,20 +4,23 @@ package com.example.androidproject
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.androidproject.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 
 class SignUpActivity : AppCompatActivity() {
-
+    var firestore : FirebaseFirestore?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        firestore = FirebaseFirestore.getInstance()
         val signupbtn = binding.signUpButton
         signupbtn.setOnClickListener {
             val id=binding.signUpEmailAddress.text.toString();
@@ -44,6 +47,10 @@ class SignUpActivity : AppCompatActivity() {
         Firebase.auth.createUserWithEmailAndPassword(userEmail, password)
             .addOnCompleteListener(this) {
                 if (it.isSuccessful) {
+                    var user = Users()
+                    user.name = findViewById<EditText>(R.id.editNickName).text.toString()
+                    user.uid = Firebase.auth.uid
+                    firestore?.collection("user")?.document(findViewById<EditText>(R.id.editNickName).text.toString())?.set(user)
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
