@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidproject.databinding.ActivitySearchBinding
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 
 class SearchActivity : AppCompatActivity() {
@@ -34,23 +36,15 @@ class SearchActivity : AppCompatActivity() {
         }
         binding.searchBtn.setOnClickListener {
             val search=findViewById<EditText>(R.id.searchText).text.toString()
-
                 takeDataFromFirebase(search)
-
-
-
-
-
-
-
         }
     }
 
     fun initializeView(postArray : ArrayList<ContentDTO>){
-
-        println("아아아아 들어간드아")
         binding.postList.layoutManager=LinearLayoutManager(this)
-        binding.postList.adapter=SearchActivityAdapter(postArray)
+        (binding.postList.layoutManager as LinearLayoutManager).reverseLayout=true
+        (binding.postList.layoutManager as LinearLayoutManager).stackFromEnd=true
+        binding.postList.adapter=SearchActivityAdapter(postArray,postUidList)
     }
     fun takeDataFromFirebase(search: String) : ArrayList<ContentDTO>{
         if(search == ""){

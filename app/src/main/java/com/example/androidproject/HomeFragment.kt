@@ -1,6 +1,7 @@
 package com.example.androidproject
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +31,7 @@ private const val ARG_PARAM2 = "param2"
 class HomeFragment : Fragment() {
     var firestore : FirebaseFirestore ?= null
     var uid : String? = null
+    var item : Users ?= null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_home, container, false)
@@ -37,7 +39,8 @@ class HomeFragment : Fragment() {
         uid = FirebaseAuth.getInstance().currentUser?.uid
         view.findViewById<RecyclerView>(R.id.H_Recycler).adapter = HomeRecyclerViewAdapter()
         view.findViewById<RecyclerView>(R.id.H_Recycler).layoutManager = LinearLayoutManager(activity)
-
+        (view.findViewById<RecyclerView>(R.id.H_Recycler).layoutManager as LinearLayoutManager).reverseLayout=true
+        (view.findViewById<RecyclerView>(R.id.H_Recycler).layoutManager as LinearLayoutManager).stackFromEnd=true
 
         return view
     }
@@ -55,6 +58,7 @@ class HomeFragment : Fragment() {
                 }
                 notifyDataSetChanged()
             }
+            item = null
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             var view = LayoutInflater.from(parent.context).inflate(R.layout.item_detail, parent, false)
@@ -65,11 +69,11 @@ class HomeFragment : Fragment() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var viewholer = (holder as CustomViewHolder).itemView
-            viewholer.findViewById<TextView>(R.id.profile_textView).text = contentDTOs!![position].userId
+            viewholer.findViewById<TextView>(R.id.profile_textView).text = contentDTOs!![position]?.UN
             Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholer.findViewById(R.id.image_Content))
             viewholer.findViewById<TextView>(R.id.content).text = contentDTOs!![position].explain
             viewholer.findViewById<TextView>(R.id.favoriteCount).text = "Likes " + contentDTOs!![position].favoriteCount
-            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholer.findViewById(R.id.profile_image))
+            Glide.with(holder.itemView.context).load(contentDTOs!![position].UPI).into(viewholer.findViewById(R.id.profile_image))
             viewholer.findViewById<ImageView>(R.id.favoriteImage).setOnClickListener{
                 favoriteEvent(position)
             }
@@ -78,6 +82,12 @@ class HomeFragment : Fragment() {
             }
             else{
                 viewholer.findViewById<ImageView>(R.id.favoriteImage).setImageResource(R.drawable.ic_baseline_favorite_border_24)
+            }
+            viewholer.findViewById<ImageView>(R.id.commentImage).setOnClickListener{v->
+                var intent = Intent(v.context, CommentActivity::class.java)
+                intent.putExtra("contentUid", UIDlist[position])
+                intent.putExtra("imageUrl", contentDTOs[position].imageUrl)
+                startActivity(intent)
             }
         }
 
