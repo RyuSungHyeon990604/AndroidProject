@@ -42,18 +42,14 @@
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/contentsView"
+        <Button
+            android:id="@+id/followbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="120dp"
-            android:text="안드로이드 개발자"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="64dp"
+            android:text="팔로우"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toTopOf="parent" />
+            tools:layout_editor_absoluteY="14dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

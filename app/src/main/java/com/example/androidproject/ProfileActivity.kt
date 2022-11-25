@@ -3,52 +3,54 @@ package com.example.androidproject
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
-import com.example.androidproject.databinding.ActivityHomeBinding
-import com.example.androidproject.databinding.ActivityWritingBinding
+import androidx.appcompat.app.AppCompatActivity
+import com.example.androidproject.databinding.ActivityProfileBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import java.text.SimpleDateFormat
-import java.util.Date
+import java.util.*
 
-class WritingActivity : AppCompatActivity() {
+
+class ProfileActivity : AppCompatActivity() {
     var PickImage = 0;
     var storage : FirebaseStorage ?= null
     var photouri : Uri?= null
-    var auth : FirebaseAuth ?= null
+    var auth : FirebaseAuth?= null
     var firestore : FirebaseFirestore ?= null
     lateinit var imageView : ImageView
-    lateinit var explain : EditText
-    lateinit var CUItem : Users
+    var CUItem : Users? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityWritingBinding.inflate(layoutInflater)
+        val binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        imageView = binding.addphotoimage
-        explain = binding.editExplain
+        imageView = binding.Pimage
         storage = FirebaseStorage.getInstance()
-        auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
         search()
+        println(auth?.currentUser?.uid + " : CUID")
+        var friends : ArrayList<String> = arrayListOf()
+        friends.add("Yu Jae Won")
+        friends.add("Yoon Sang Min")
 
         var photoPickerIntent = Intent(Intent.ACTION_PICK)
         photoPickerIntent.type = "image/*"
-        binding.imageupload.setOnClickListener {
+        binding.ProfileUpload.setOnClickListener {
             startActivityForResult(photoPickerIntent, PickImage)
         }
-        binding.uploadButton.setOnClickListener {
-            contentUpload()
+        binding.CompleteButton.setOnClickListener {
+            profileUpload()
         }
 
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == PickImage){
@@ -71,25 +73,28 @@ class WritingActivity : AppCompatActivity() {
             }
         }
     }
-    fun contentUpload(){
+    fun profileUpload(){
         var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         var imageFileName = "IMAGE " + timestamp + "_.png"
-        var storageRef = storage?.reference?.child("images")?.child(imageFileName)
-
+        var storageRef = storage?.reference?.child("profileimages")?.child(imageFileName)
         storageRef?.putFile(photouri!!)?.continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
             return@continueWithTask storageRef.downloadUrl
         }?.addOnSuccessListener { url ->
-                var contentDTO = ContentDTO()
-                contentDTO.imageUrl = url.toString()
-                contentDTO.UPI = CUItem.profileimageUrl
-                contentDTO.UN = CUItem.name
-                contentDTO.uid = auth?.currentUser?.uid
-                contentDTO.userId = auth?.currentUser?.email
-                contentDTO.explain = explain.text.toString()
-                contentDTO.timestamp = System.currentTimeMillis()
-                firestore?.collection("images")?.document()?.set(contentDTO)
-                setResult(Activity.RESULT_OK)
-                finish()
+            var username = CUItem?.name
+            if (username != null) {
+                firestore?.collection("user")?.document(username)?.update("profileimageUrl", url.toString())
+            }
+            firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, error ->
+                for(snapshot in querySnapshot!!.documents) {
+
+                    if (snapshot.getString("uid")!!.contains(FirebaseAuth.getInstance().currentUser?.uid.toString())) {
+                        println("didididid:"+snapshot.id)
+                        firestore?.collection("images")?.document(snapshot.id)?.update("upi", url.toString())
+                    }
+                }
+            }
+            setResult(Activity.RESULT_OK)
+            super.onBackPressed()
         }
     }
 }

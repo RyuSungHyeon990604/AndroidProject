@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,7 +32,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.SearchFragment -> {
-                    replaceFragment(SearchFragment())
+                    replaceFragment(MyPageFragment())
                     true
                 }
                 else -> false
@@ -44,6 +45,9 @@ class HomeActivity : AppCompatActivity() {
                 startActivity(Intent(this, WritingActivity::class.java))
                 println("Asdasd")
             }
+        }
+        binding.searchHomeFragment.setOnClickListener {
+            startActivity(Intent(this,SearchActivity::class.java))
         }
 
         ActivityCompat.requestPermissions(this,

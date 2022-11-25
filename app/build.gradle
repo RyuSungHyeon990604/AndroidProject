@@ -60,5 +60,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.4.1'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:design:27.1.1'
 
 }
