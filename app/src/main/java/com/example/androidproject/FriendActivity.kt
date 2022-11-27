@@ -30,6 +30,9 @@ class FriendActivity : AppCompatActivity() {
         binding.re.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.re.adapter = adapter
 
+        binding.friendbackBtn.setOnClickListener {
+            super.onBackPressed()
+        }
 
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
@@ -38,19 +41,18 @@ class FriendActivity : AppCompatActivity() {
 
         val handler = Handler()
         handler.postDelayed(Runnable {
-            itemList.clear()
             //CUItem?.friends? 내가가지고있는 친구목록 어레이리스트
             //allList[].name 이게 전체유저
-
+            itemList.clear()
             for(user in allList){
                 println("상대방이름"+user.name)
                 if(!CUItem?.name?.equals(user.name)!!){
                     if(CUItem?.friends?.contains(user.name) == true){
-                        val item = ListLayout(user.name as String , "언팔로우")
+                        val item = ListLayout(user.name as String , "언팔로우",user.profileimageUrl as String)
                         itemList.add(item)
                     }
                     else{
-                        val item = ListLayout(user.name as String , "팔로우")
+                        val item = ListLayout(user.name as String , "팔로우",user.profileimageUrl as String)
                         itemList.add(item)
                     }
                 }

@@ -6,13 +6,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.androidproject.databinding.ActivityProfileBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import java.text.SimpleDateFormat
@@ -25,8 +23,8 @@ class ProfileActivity : AppCompatActivity() {
     var photouri : Uri?= null
     var auth : FirebaseAuth?= null
     var firestore : FirebaseFirestore ?= null
+    var username : String ?= null
     lateinit var imageView : ImageView
-    var CUItem : Users? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -35,11 +33,7 @@ class ProfileActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         firestore = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-        search()
         println(auth?.currentUser?.uid + " : CUID")
-        var friends : ArrayList<String> = arrayListOf()
-        friends.add("Yu Jae Won")
-        friends.add("Yoon Sang Min")
 
         var photoPickerIntent = Intent(Intent.ACTION_PICK)
         photoPickerIntent.type = "image/*"
@@ -47,7 +41,17 @@ class ProfileActivity : AppCompatActivity() {
             startActivityForResult(photoPickerIntent, PickImage)
         }
         binding.CompleteButton.setOnClickListener {
-            profileUpload()
+            val uid : String? = auth?.currentUser?.uid
+            firestore?.collection("user")?.get()?.addOnSuccessListener { result ->
+                for(document in result){
+                    if(document.get("uid") == uid){
+                        username = document.get("name") as String?
+                    }
+                }
+                profileUpload(username)
+                super.onBackPressed()
+
+            }
         }
 
     }
@@ -63,38 +67,28 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
-    fun search(){
-        val uid : String? = auth?.currentUser?.uid
-        firestore?.collection("user")?.orderBy("uid")?.addSnapshotListener { querySnapshot, error ->
-            for(snapshot in querySnapshot!!.documents) {
-                if (snapshot.getString("uid")!!.contains(uid.toString())) {
-                    CUItem = snapshot.toObject(Users::class.java)!!
-                }
-            }
-        }
-    }
-    fun profileUpload(){
+    fun profileUpload(UN: String?){
         var timestamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        var imageFileName = "IMAGE " + timestamp + "_.png"
+        var imageFileName = UN + "Profile_.png"
         var storageRef = storage?.reference?.child("profileimages")?.child(imageFileName)
         storageRef?.putFile(photouri!!)?.continueWithTask { task: Task<UploadTask.TaskSnapshot> ->
             return@continueWithTask storageRef.downloadUrl
         }?.addOnSuccessListener { url ->
-            var username = CUItem?.name
+
+            var username = UN
             if (username != null) {
                 firestore?.collection("user")?.document(username)?.update("profileimageUrl", url.toString())
-            }
-            firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, error ->
-                for(snapshot in querySnapshot!!.documents) {
 
-                    if (snapshot.getString("uid")!!.contains(FirebaseAuth.getInstance().currentUser?.uid.toString())) {
-                        println("didididid:"+snapshot.id)
-                        firestore?.collection("images")?.document(snapshot.id)?.update("upi", url.toString())
+            }
+            firestore?.collection("images")?.whereEqualTo("uid",auth?.currentUser?.uid.toString())
+                ?.get()
+                ?.addOnSuccessListener { document->
+                    for(documents in document){
+                        firestore?.collection("images")?.document(documents.id)?.update("upi", url.toString())
                     }
                 }
-            }
-            setResult(Activity.RESULT_OK)
-            super.onBackPressed()
+                setResult(Activity.RESULT_OK)
+
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.androidproject
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidproject.databinding.ActivitySearchBinding
+import com.example.androidproject.databinding.ItemDetailBinding
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
@@ -22,10 +24,11 @@ class SearchActivity : AppCompatActivity() {
     var postUidList : ArrayList<String> = arrayListOf();
 
     lateinit var binding : ActivitySearchBinding;
-
+    lateinit var binding2 : ItemDetailBinding;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
+        binding2= ItemDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firestore=FirebaseFirestore.getInstance()
 
@@ -38,6 +41,7 @@ class SearchActivity : AppCompatActivity() {
             val search=findViewById<EditText>(R.id.searchText).text.toString()
                 takeDataFromFirebase(search)
         }
+
     }
 
     fun initializeView(postArray : ArrayList<ContentDTO>){
