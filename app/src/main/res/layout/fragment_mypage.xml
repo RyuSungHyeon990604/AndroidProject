@@ -15,15 +15,10 @@
             android:id="@+id/account_iv_profile"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/man" />
 
-        <Button
-            android:id="@+id/account_btn_follow_signout"
-            android:text="follow"
-            android:layout_toRightOf="@+id/account_iv_profile"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"/>
+
 
         <LinearLayout
             android:gravity="center"

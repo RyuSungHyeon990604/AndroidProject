@@ -1,9 +1,12 @@
 package com.example.androidproject
 
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.androidproject.databinding.ItemDetailBinding
@@ -28,6 +31,13 @@ class SearchActivityAdapter(private val postList : ArrayList<ContentDTO>,private
         viewholer.findViewById<ImageView>(R.id.favoriteImage).setOnClickListener{
             favoriteEvent(position)
         }
+        viewholer.findViewById<ImageView>(R.id.commentImage).setOnClickListener{v->
+            var intent = Intent(v.context, CommentActivity::class.java)
+            intent.putExtra("contentUid", UIDlist[position])
+            intent.putExtra("imageUrl", postList[position].imageUrl)
+            v.getContext().startActivity(intent);
+        }
+
         if(postList!![position].favorites.containsKey(FirebaseAuth.getInstance().currentUser?.uid)){
             viewholer.findViewById<ImageView>(R.id.favoriteImage).setImageResource(R.drawable.ic_baseline_favorite_24)
         }
